@@ -27,7 +27,7 @@ builder.Services.AddControllersWithViews()
 // Register VehInsContext with dependency injection
 builder.Services.AddDbContext<VehInsContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("VehicleDb")));
-
+Console.WriteLine("đã kết nối database");
 builder.Services.AddControllersWithViews()
     .AddDataAnnotationsLocalization();
 
