@@ -2,32 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using PayOS;
 using Vehicle_Inspection.Data;
-using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Bind đúng port Railway
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
-
-// Hỗ trợ chạy sau reverse proxy như Railway
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders =
-        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-
-    options.KnownNetworks.Clear();
-    options.KnownProxies.Clear();
-});
-
 // Add services to the container.
-builder.Services.AddControllersWithViews()
-    .AddDataAnnotationsLocalization();
+builder.Services.AddControllersWithViews();
 
 // Register VehInsContext with dependency injection
 builder.Services.AddDbContext<VehInsContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("VehicleDb")));
-Console.WriteLine("đã kết nối database");
+
 builder.Services.AddControllersWithViews()
     .AddDataAnnotationsLocalization();
 
@@ -85,7 +69,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseForwardedHeaders();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
